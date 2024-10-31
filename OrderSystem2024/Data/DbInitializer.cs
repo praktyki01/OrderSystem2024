@@ -154,41 +154,41 @@ namespace OrderSystem2024.Data
             }
             context.SaveChanges();
 
-            var customers = new Customer[]
-            {
-                new Customer
-                {
-                    CustomerName = "Klient 1",
-                    ContactName = "Adam Małysz",
-                    Address = "ul. Skoczków 1",
-                    City = "Zakopane",
-                    PostalCode = "34-500",
-                    Country = "Polska"
-                },
-                new Customer
-                {
-                    CustomerName = "Klient 2",
-                    ContactName = "Robert Lewandowski",
-                    Address = "ul. Piłkarska 2",
-                    City = "Warszawa",
-                    PostalCode = "00-002",
-                    Country = "Polska"
-                },
-                new Customer
-                {
-                    CustomerName = "Klient 3",
-                    ContactName = "Kamil Stoch",
-                    Address = "ul. Lwowska 2",
-                    City = "Warszawa",
-                    PostalCode = "00-003",
-                    Country = "Polska"
-                }
-            };
-            foreach (var customer in customers)
-            {
-                context.Customer.Add(customer);
-            }
-            context.SaveChanges();
+            //var customers = new Customer[]
+            //{
+            //    new Customer
+            //    {
+            //        CustomerName = "Klient 1",
+            //        ContactName = "Adam Małysz",
+            //        Address = "ul. Skoczków 1",
+            //        City = "Zakopane",
+            //        PostalCode = "34-500",
+            //        Country = "Polska"
+            //    },
+            //    new Customer
+            //    {
+            //        CustomerName = "Klient 2",
+            //        ContactName = "Robert Lewandowski",
+            //        Address = "ul. Piłkarska 2",
+            //        City = "Warszawa",
+            //        PostalCode = "00-002",
+            //        Country = "Polska"
+            //    },
+            //    new Customer
+            //    {
+            //        CustomerName = "Klient 3",
+            //        ContactName = "Kamil Stoch",
+            //        Address = "ul. Lwowska 2",
+            //        City = "Warszawa",
+            //        PostalCode = "00-003",
+            //        Country = "Polska"
+            //    }
+            //};
+            //foreach (var customer in customers)
+            //{
+            //    context.Customer.Add(customer);
+            //}
+            //context.SaveChanges();
 
             var orders = new Order[]
             {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.Xml;
 
 namespace OrderSystem2024.Models
@@ -20,6 +21,9 @@ namespace OrderSystem2024.Models
         public string PostalCode { get; set; }
         [Display(Name = "Kraj")]
         public string Country { get; set; }
+
+        public string CustomerUserId { get; set; }
+        public IdentityUser? CustomerUser { get; set; }
 
         public ICollection<Order> Orders { get; } = new List<Order>();
     }
