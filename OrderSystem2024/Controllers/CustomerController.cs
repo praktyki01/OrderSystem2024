@@ -22,7 +22,8 @@ namespace OrderSystem2024.Controllers
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Customer.ToListAsync());
+            var applicationDbContext = _context.Customer.Include(c => c.CustomerUser);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Customer/Details/5
@@ -34,6 +35,7 @@ namespace OrderSystem2024.Controllers
             }
 
             var customer = await _context.Customer
+                .Include(c => c.CustomerUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -46,6 +48,7 @@ namespace OrderSystem2024.Controllers
         // GET: Customer/Create
         public IActionResult Create()
         {
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace OrderSystem2024.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CustomerName,ContactName,Address,City,PostalCode,Country")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,CustomerName,ContactName,Address,City,PostalCode,Country,CustomerUserId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace OrderSystem2024.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id", customer.CustomerUserId);
             return View(customer);
         }
 
@@ -78,6 +82,7 @@ namespace OrderSystem2024.Controllers
             {
                 return NotFound();
             }
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id", customer.CustomerUserId);
             return View(customer);
         }
 
@@ -86,7 +91,7 @@ namespace OrderSystem2024.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerName,ContactName,Address,City,PostalCode,Country")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CustomerName,ContactName,Address,City,PostalCode,Country,CustomerUserId")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -113,6 +118,7 @@ namespace OrderSystem2024.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id", customer.CustomerUserId);
             return View(customer);
         }
 
@@ -125,6 +131,7 @@ namespace OrderSystem2024.Controllers
             }
 
             var customer = await _context.Customer
+                .Include(c => c.CustomerUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
