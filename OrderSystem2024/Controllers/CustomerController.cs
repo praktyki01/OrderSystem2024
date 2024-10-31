@@ -48,7 +48,7 @@ namespace OrderSystem2024.Controllers
         // GET: Customer/Create
         public IActionResult Create()
         {
-            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Email", "Email");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace OrderSystem2024.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id", customer.CustomerUserId);
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Email", customer.CustomerUserId);
             return View(customer);
         }
 
@@ -82,7 +82,7 @@ namespace OrderSystem2024.Controllers
             {
                 return NotFound();
             }
-            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Id", customer.CustomerUserId);
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Id", "Email", customer.CustomerUserId);
             return View(customer);
         }
 
