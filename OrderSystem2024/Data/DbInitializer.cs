@@ -1,10 +1,13 @@
-﻿using OrderSystem2024.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using OrderSystem2024.Models;
 
 namespace OrderSystem2024.Data
 {
     public class DbInitializer
     {
-        public static async Task Initialize(ApplicationDbContext context)
+        public static async Task Initialize(ApplicationDbContext context,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             context.Database.EnsureCreated();
 
@@ -154,41 +157,42 @@ namespace OrderSystem2024.Data
             }
             context.SaveChanges();
 
-            //var customers = new Customer[]
-            //{
-            //    new Customer
-            //    {
-            //        CustomerName = "Klient 1",
-            //        ContactName = "Adam Małysz",
-            //        Address = "ul. Skoczków 1",
-            //        City = "Zakopane",
-            //        PostalCode = "34-500",
-            //        Country = "Polska"
-            //    },
-            //    new Customer
-            //    {
-            //        CustomerName = "Klient 2",
-            //        ContactName = "Robert Lewandowski",
-            //        Address = "ul. Piłkarska 2",
-            //        City = "Warszawa",
-            //        PostalCode = "00-002",
-            //        Country = "Polska"
-            //    },
-            //    new Customer
-            //    {
-            //        CustomerName = "Klient 3",
-            //        ContactName = "Kamil Stoch",
-            //        Address = "ul. Lwowska 2",
-            //        City = "Warszawa",
-            //        PostalCode = "00-003",
-            //        Country = "Polska"
-            //    }
-            //};
-            //foreach (var customer in customers)
-            //{
-            //    context.Customer.Add(customer);
-            //}
-            //context.SaveChanges();
+            var cos = await roleManager.CreateAsync(new IdentityRole("Admin"));
+            var adminUser = new IdentityUser
+            {
+                UserName = "admin@admin.pl",
+                NormalizedUserName = "ADMIN@ADMIN.PL",
+                Email = "admin@admin.pl",
+                NormalizedEmail = "ADMIN@ADMIN.PL",
+                EmailConfirmed = true
+            };
+            if (context.Users.All(u => u.Id != adminUser.Id))
+            {
+                var user = await userManager.FindByEmailAsync(adminUser.Email);
+                var result = await userManager.CreateAsync(adminUser, "Admin1!");
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+
+            }
+            context.SaveChanges();
+            var customers = new Customer[]
+            {
+                new Customer
+                {
+                    CustomerName = "Klient 1",
+                    ContactName = "Adam Małysz",
+                    Address = "ul. Skoczków 1",
+                    City = "Zakopane",
+                    PostalCode = "34-500",
+                    Country = "Polska",
+                    CustomerUserId = adminUser.Id,
+                },
+                
+            };
+            foreach (var customer in customers)
+            {
+                context.Customer.Add(customer);
+            }
+            context.SaveChanges();
 
             var orders = new Order[]
             {
@@ -202,14 +206,14 @@ namespace OrderSystem2024.Data
                 new Order
                 {
                     OrderDate = DateTime.Now,
-                    CustomerId = 2,
+                    CustomerId = 1,
                     EmployeeId = 2,
                     ShipperId = 2
                 },
                 new Order
                 {
                     OrderDate = DateTime.Now,
-                    CustomerId = 3,
+                    CustomerId = 1,
                     EmployeeId = 3,
                     ShipperId = 3
                 }
