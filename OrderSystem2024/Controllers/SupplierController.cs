@@ -24,6 +24,10 @@ namespace OrderSystem2024.Controllers
         {
             return View(await _context.Supplier.ToListAsync());
         }
+        public async Task<IActionResult> Index2(string Country)
+        {
+            return View(await _context.Supplier.Where(s=>s.Country==Country).ToListAsync());
+        }
 
         // GET: Supplier/Details/5
         public async Task<IActionResult> Details(int? id)
