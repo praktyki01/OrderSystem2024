@@ -25,6 +25,13 @@ namespace OrderSystem2024.Controllers
             var applicationDbContext = _context.Product.Include(p => p.Category).Include(p => p.Supplier);
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> Index2(int? CategoryId)
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
+            var applicationDbContext = _context.Product.Include(p => p.Category).Include(p => p.Supplier).
+                Where(p=>p.CategoryId== CategoryId);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
         // GET: Product/Details/5
         public async Task<IActionResult> Details(int? id)

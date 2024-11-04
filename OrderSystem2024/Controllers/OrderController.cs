@@ -32,12 +32,19 @@ namespace OrderSystem2024.Controllers
             var applicationDbContext = _context.Order.Include(o => o.Customer).Include(o => o.Employee).Include(o => o.Shipper);
             return View(await applicationDbContext.ToListAsync());
         }
-        public async Task<IActionResult> Index3()
+        public async Task<IActionResult> Index3(DateTime? orderDate)
         {
+            if(orderDate==null)
+            {
+                var app = _context.Order.
+                Include(o => o.Customer).Include(o => o.Employee).
+                Include(o => o.Shipper);
+                return View(await app.ToListAsync());
+            }
             var applicationDbContext = _context.Order.
                 Include(o => o.Customer).Include(o => o.Employee).
                 Include(o => o.Shipper)
-                .Where(o=>o.OrderDate.Date==new DateTime(2024,11,5));
+                .Where(o=>o.OrderDate.Date==orderDate);
             return View(await applicationDbContext.ToListAsync());
         }
 
