@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OrderSystem2024.Data;
+using System.Runtime.InteropServices;
 
 namespace OrderSystem2024.Controllers
 {
@@ -37,6 +40,23 @@ namespace OrderSystem2024.Controllers
             {
                 await _userManager.AddToRoleAsync(user, role);
             }
+            return View();
+        }
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> AssignRoleByForm(string email, string role)
+        {
+            ViewData["CustomerUserId"] = new SelectList(_context.Users, "Email", "Email");
+            ViewData["Roles"] = new SelectList(_roleManager.Roles, "Name", "Name");
+            if (email == null)
+                return View();
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (!await _userManager.IsInRoleAsync(user, role))
+            {
+                await _userManager.AddToRoleAsync(user, role);
+                ViewBag.Info = "Dodano rolę " + role + " do użytkownika " + email;
+            }
+            
             return View();
         }
     }

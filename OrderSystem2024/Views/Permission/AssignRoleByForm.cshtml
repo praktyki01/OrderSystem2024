@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewData["Title"] = "AssignRoleByForm";
+}
+
+<h1>AssignRoleByForm</h1>
+
+<form asp-action="AssignRoleByForm" method="post">
+    <select name="email" class="form-control" asp-items="ViewBag.CustomerUserId"></select>
+    <select name="role" class="form-control" asp-items="ViewBag.Roles"></select>
+    <input type="submit" value="Wyślij"/>
+
+</form>
+
+<h2>@ViewBag.Info</h2>
+
+
