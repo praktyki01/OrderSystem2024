@@ -25,6 +25,13 @@ namespace OrderSystem2024.Controllers
             var applicationDbContext = _context.OrderDetail.Include(o => o.Order).Include(o => o.Product);
             return View(await applicationDbContext.ToListAsync());
         }
+        public async Task<IActionResult> Index2(int? id)
+        {
+            var applicationDbContext = _context.OrderDetail.
+                Include(o => o.Order).Include(o => o.Product)
+                .Where(o=>o.OrderId==id);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
         // GET: OrderDetail/Details/5
         public async Task<IActionResult> Details(int? id)
